@@ -17,6 +17,7 @@ class Main {
 
         // Take the inputs
         number1 = scanner.nextDouble();
+        number2 = scanner.nextDouble();
 
         System.out.println("Enter the operator (+,-,*,/):");
 
@@ -27,6 +28,16 @@ class Main {
             // case to add two numbers
             case '+':
                 result = number1 + number2;
+                break;
+
+            // case to subtract two numbers
+            case '-':
+                result = number1 - number2;
+                break;
+
+            // case to multiply two numbers
+            case '*':
+                result = number1 * number2;
                 break;
 
             // case to divide two numbers
