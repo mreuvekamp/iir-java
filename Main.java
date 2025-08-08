@@ -1,59 +1,84 @@
 // Java program for simple calculator
-import java.lang.*;
+
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 
 // Driver class
 class Main {
     // main function
-    public static void main(String[] args)
-    {
-        // Stores two numbers
-        double number1, number2;
+    public static void main(String[] args) {
+        unprioritizedWithStore();
+//        unprioritizedWithoutStore();
+    }
+
+    private static void unprioritizedWithStore() {
+        // Stores the numbers
+        List<Double> numbers = new ArrayList<>();
+        List<String> operators = new ArrayList<>();
+
+        boolean resultIsCalculated = true;
+        boolean shouldReadNumber = true;
 
         // Take input from the user
         Scanner scanner = new Scanner(System.in);
 
-        System.out.println("Enter the first number:");
-        number1 = scanner.nextDouble();
+        while (scanner.hasNext()) {
+            if (shouldReadNumber) {
+                numbers.add(scanner.nextDouble());
+                shouldReadNumber = false;
+            } else {
+                operators.add(scanner.next());
+                shouldReadNumber = true;
+            }
+        }
 
-        System.out.println("Enter the operator (+,-,*,/):");
-        char operator = scanner.next().charAt(0);
-
-        System.out.println("Enter the second number:");
-        number2 = scanner.nextDouble();
+        if (numbers.size() - operators.size() != 1) {
+            System.out.println("Wrong number of numbers (%d) vs number of operators (%d)".formatted(numbers.size(), operators.size()));
+            return;
+        }
 
         double result = 0;
-        boolean resultIsCalculated = true;
+        int numberIndex = 0;
+        int operatorIndex = 0;
 
-        switch (operator) {
-            // case to add two numbers
-            case '+':
-                result = number1 + number2;
-                break;
+        for (Double number : numbers) {
+            ++numberIndex;
 
-            // case to subtract two numbers
-            case '-':
-                result = number1 - number2;
-                break;
+            if (numberIndex == 1) {
+                result = number;
+            } else {
+                switch (operators.get(operatorIndex++)) {
+                    // case to add two numbers
+                    case "+":
+                        result = result + number;
+                        break;
 
-            // case to multiply two numbers
-            case '*':
-                result = number1 * number2;
-                break;
+                    // case to subtract two numbers
+                    case "-":
+                        result = result - number;
+                        break;
 
-            // case to divide two numbers
-            case '/':
-                if (number2 == 0) {
-                    resultIsCalculated = false;
-                    System.out.println();
-                    System.out.println("Cannot divide by zero!");
-                } else {
-                    result = number1 / number2;
+                    // case to multiply two numbers
+                    case "*":
+                        result = result * number;
+                        break;
+
+                    // case to divide two numbers
+                    case "/":
+                        if (number == 0) {
+                            resultIsCalculated = false;
+                            System.out.println();
+                            System.out.println("Cannot divide by zero!");
+                        } else {
+                            result = result / number;
+                        }
+                        break;
+
+                    default:
+                        System.out.println("Unknown operator");
                 }
-                break;
-
-            default:
-                System.out.println("Unknown operator");
+            }
         }
 
         if (resultIsCalculated) {
@@ -61,8 +86,77 @@ class Main {
             System.out.println();
 
             // print the final result
-            System.out.println(number1 + " " + operator + " " + number2
-                + " = " + result);
+            System.out.println(result);
+        }
+    }
+
+    private static void unprioritizedWithoutStore() {
+        boolean resultIsCalculated = true;
+        boolean shouldReadNumber = true;
+        boolean hasStarted = false;
+        String operator = null;
+
+        double result = 0;
+
+        // Take input from the user
+        Scanner scanner = new Scanner(System.in);
+
+        while (scanner.hasNext()) {
+            if (shouldReadNumber) {
+                double number = scanner.nextDouble();
+
+                if (!hasStarted) {
+                    hasStarted = true;
+                    result = number;
+                } else {
+                    resultIsCalculated = true;
+
+                    switch (operator) {
+                        // case to add two numbers
+                        case "+":
+                            result = result + number;
+                            break;
+
+                        // case to subtract two numbers
+                        case "-":
+                            result = result - number;
+                            break;
+
+                        // case to multiply two numbers
+                        case "*":
+                            result = result * number;
+                            break;
+
+                        // case to divide two numbers
+                        case "/":
+                            if (number == 0) {
+                                resultIsCalculated = false;
+                                System.out.println();
+                                System.out.println("Cannot divide by zero!");
+                            } else {
+                                result = result / number;
+                            }
+                            break;
+
+                        default:
+                            System.out.println("Unknown operator");
+                    }
+                }
+
+                shouldReadNumber = false;
+            } else {
+                operator = scanner.next();
+                shouldReadNumber = true;
+                resultIsCalculated = false;
+            }
+        }
+
+        if (resultIsCalculated) {
+            System.out.println("The final result:");
+            System.out.println();
+
+            // print the final result
+            System.out.println(result);
         }
     }
 }
