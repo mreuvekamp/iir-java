@@ -13,15 +13,15 @@ class Main {
         // Take input from the user
         Scanner scanner = new Scanner(System.in);
 
-        System.out.println("Enter the numbers:");
-
-        // Take the inputs
+        System.out.println("Enter the first number:");
         number1 = scanner.nextDouble();
-        number2 = scanner.nextDouble();
 
         System.out.println("Enter the operator (+,-,*,/):");
-
         char operator = scanner.next().charAt(0);
+
+        System.out.println("Enter the second number:");
+        number2 = scanner.nextDouble();
+
         double result = 0;
         boolean resultIsCalculated = true;
 
