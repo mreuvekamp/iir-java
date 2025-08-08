@@ -8,12 +8,11 @@ import java.util.Scanner;
 class Main {
     // main function
     public static void main(String[] args) {
-        unprioritizedWithStore();
-//        unprioritizedWithoutStore();
+        unprioritized();
     }
 
-    private static void unprioritizedWithStore() {
-        // Stores the numbers
+
+    private static NumbersAndOperators readNumbersAndOperators() {
         List<Double> numbers = new ArrayList<>();
         List<String> operators = new ArrayList<>();
 
@@ -33,10 +32,20 @@ class Main {
             }
         }
 
-        if (numbers.size() - operators.size() != 1) {
+        return new NumbersAndOperators(numbers, operators);
+    }
+
+    private static void unprioritized() {
+        NumbersAndOperators numbersAndOperators = readNumbersAndOperators();
+        List<Double> numbers = numbersAndOperators.numbers;
+        List<String> operators = numbersAndOperators.operators;
+
+        if (numbersAndOperators.numbers.size() - operators.size() != 1) {
             System.out.println("Wrong number of numbers (%d) vs number of operators (%d)".formatted(numbers.size(), operators.size()));
             return;
         }
+
+        boolean resultIsCalculated = true;
 
         double result = 0;
         int numberIndex = 0;
@@ -90,73 +99,6 @@ class Main {
         }
     }
 
-    private static void unprioritizedWithoutStore() {
-        boolean resultIsCalculated = true;
-        boolean shouldReadNumber = true;
-        boolean hasStarted = false;
-        String operator = null;
-
-        double result = 0;
-
-        // Take input from the user
-        Scanner scanner = new Scanner(System.in);
-
-        while (scanner.hasNext()) {
-            if (shouldReadNumber) {
-                double number = scanner.nextDouble();
-
-                if (!hasStarted) {
-                    hasStarted = true;
-                    result = number;
-                } else {
-                    resultIsCalculated = true;
-
-                    switch (operator) {
-                        // case to add two numbers
-                        case "+":
-                            result = result + number;
-                            break;
-
-                        // case to subtract two numbers
-                        case "-":
-                            result = result - number;
-                            break;
-
-                        // case to multiply two numbers
-                        case "*":
-                            result = result * number;
-                            break;
-
-                        // case to divide two numbers
-                        case "/":
-                            if (number == 0) {
-                                resultIsCalculated = false;
-                                System.out.println();
-                                System.out.println("Cannot divide by zero!");
-                            } else {
-                                result = result / number;
-                            }
-                            break;
-
-                        default:
-                            System.out.println("Unknown operator");
-                    }
-                }
-
-                shouldReadNumber = false;
-            } else {
-                operator = scanner.next();
-                shouldReadNumber = true;
-                resultIsCalculated = false;
-            }
-        }
-
-        if (resultIsCalculated) {
-            System.out.println("The final result:");
-            System.out.println();
-
-            // print the final result
-            System.out.println(result);
-        }
+    private record NumbersAndOperators(List<Double> numbers, List<String> operators) {
     }
 }
