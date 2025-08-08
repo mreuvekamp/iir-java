@@ -23,6 +23,7 @@ class Main {
 
         char operator = scanner.next().charAt(0);
         double result = 0;
+        boolean resultIsCalculated = true;
 
         switch (operator) {
             // case to add two numbers
@@ -42,18 +43,26 @@ class Main {
 
             // case to divide two numbers
             case '/':
-                result = number1 / number2;
+                if (number2 == 0) {
+                    resultIsCalculated = false;
+                    System.out.println();
+                    System.out.println("Cannot divide by zero!");
+                } else {
+                    result = number1 / number2;
+                }
                 break;
 
             default:
                 System.out.println("Unknown operator");
         }
 
-        System.out.println("The final result:");
-        System.out.println();
+        if (resultIsCalculated) {
+            System.out.println("The final result:");
+            System.out.println();
 
-        // print the final result
-        System.out.println(number1 + " " + operator + " " + number2
-            + " = " + result);
+            // print the final result
+            System.out.println(number1 + " " + operator + " " + number2
+                + " = " + result);
+        }
     }
 }
