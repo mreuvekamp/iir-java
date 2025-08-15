@@ -8,15 +8,22 @@ import java.util.Scanner;
 class Main {
     // main function
     public static void main(String[] args) {
-        unprioritized();
-    }
+        NumbersAndOperators numbersAndOperators = readNumbersAndOperators();
+        List<Double> numbers = numbersAndOperators.numbers;
+        List<String> operators = numbersAndOperators.operators;
 
+        if (numbers.size() - operators.size() != 1) {
+            System.out.println("Wrong number of numbers (%d) vs number of operators (%d)".formatted(numbers.size(), operators.size()));
+            return;
+        }
+
+        prioritized(numbers, operators);
+    }
 
     private static NumbersAndOperators readNumbersAndOperators() {
         List<Double> numbers = new ArrayList<>();
         List<String> operators = new ArrayList<>();
 
-        boolean resultIsCalculated = true;
         boolean shouldReadNumber = true;
 
         // Take input from the user
@@ -35,16 +42,53 @@ class Main {
         return new NumbersAndOperators(numbers, operators);
     }
 
-    private static void unprioritized() {
-        NumbersAndOperators numbersAndOperators = readNumbersAndOperators();
-        List<Double> numbers = numbersAndOperators.numbers;
-        List<String> operators = numbersAndOperators.operators;
+    private static void prioritized(List<Double> numbers, List<String> operators) {
+        List<Double> newNumbers = new ArrayList<>();
+        List<String> newOperators = new ArrayList<>();
 
-        if (numbersAndOperators.numbers.size() - operators.size() != 1) {
-            System.out.println("Wrong number of numbers (%d) vs number of operators (%d)".formatted(numbers.size(), operators.size()));
-            return;
+        double leftHandNumber = 0;
+        int numberIndex = 0;
+        int operatorIndex = 0;
+
+        for (Double number : numbers) {
+            ++numberIndex;
+
+            if (numberIndex == 1) {
+                leftHandNumber = number;
+            } else {
+                String operator = operators.get(operatorIndex++);
+                switch (operator) {
+                    case "+", "-":
+                        newNumbers.add(leftHandNumber);
+                        newOperators.add(operator);
+                        leftHandNumber = number;
+                        break;
+
+                    case "*":
+                        leftHandNumber = leftHandNumber * number;
+                        break;
+
+                    case "/":
+                        if (number == 0) {
+                            System.out.println();
+                            System.out.println("Cannot divide by zero!");
+                        } else {
+                            leftHandNumber = leftHandNumber / number;
+                        }
+                        break;
+
+                    default:
+                        System.out.println("Unknown operator");
+                }
+            }
         }
 
+        newNumbers.add(leftHandNumber);
+
+        unprioritized(newNumbers, newOperators);
+    }
+
+    private static void unprioritized(List<Double> numbers, List<String> operators) {
         boolean resultIsCalculated = true;
 
         double result = 0;
