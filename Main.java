@@ -8,7 +8,8 @@ class Main {
     public static void main(String[] args)
     {
         // Stores two numbers
-        double number1, number2;
+        double number1;
+        double number2;
 
         // Take input from the user
         Scanner scanner = new Scanner(System.in);
